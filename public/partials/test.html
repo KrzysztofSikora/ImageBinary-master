@@ -1,0 +1,23 @@
+<div ng-controller="TestController">
+    <form role="form">
+        <div class="form-group" >
+            <label>zmienna</label>
+            <input type="text" ng-model="testModel.number" class="form-control" id="zmienna"><br>
+            <input type="text" ng-model="testModel.message" class="form-control" id="zmienna2"><br>
+            <a href="/#/test/{{testModel.number}}"><button ng-click="save()" type="submit" class="btn btn-default">Funkcja!</button></a>
+
+            <br>
+            <input type="text" ng-model="testModel.zmienna" class="form-control" id="getres" placeholder="getres"><br>
+            <a ng-click="post()" href="/#/test/{{testModel.zmienna}}" >GETres</a>
+
+            <input type="text" ng-model="testModel.get" class="form-control" id="get"><br>
+            <a ng-click="get()" href="/#/test/{{testModel.get}}" >GET</a>
+
+        </div>
+    </form>
+
+
+    ng-Model: {{ testModel }}
+    </br>
+    zmiennaResource: {{ zmiennaResource | json}}
+</div>
