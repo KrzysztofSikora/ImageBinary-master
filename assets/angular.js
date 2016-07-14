@@ -16,14 +16,14 @@ app.config(["$routeProvider", function ($routeProvider) {
             controller: "TestController"
         })
 
-        
+
         .when("/disp/", {
             templateUrl: "/partials/disp.html",
             controller: "TestController"
         })
         .when("/img", {
             templateUrl: "/partials/image_form.html",
-          
+
         })
         .otherwise({
             redirectTo: "/"
@@ -34,18 +34,16 @@ app.config(["$routeProvider", function ($routeProvider) {
 app.controller("TestController", ["$scope", "$resource", "$routeParams", "$http",
     function ($scope, $resource, $routeParams, $http) {
 
-        $scope.testFunction = function () {
-            $http.get('/show/57866e4421316d6712adebb8').success(function (post) {
+        // $scope.testFunction = function () {
+            $http.get('/show/2.jpg').success(function (post) {
 
 
-                $scope.image = post.fileData
-       
-                
-            }); 
-        }
+                console.log('data:'+ post.mime +';base64,' + post.fileData)
+                $scope.image = 'data:'+ post.mime +';base64,' + post.fileData
 
-    
 
+            });
+        // }
 
 
     }]);

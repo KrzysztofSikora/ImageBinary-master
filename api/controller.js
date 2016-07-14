@@ -86,21 +86,18 @@ router.get("/test", function (req, res) {
 // })
 
 
-
 var Busboy = require('busboy');
 
 
 router.post('/upload', function (req, res) {
 
 
-
-
     var busboy = new Busboy({headers: req.headers});
-    var base64data ="";
+    var base64data = "";
     var filetype = "";
     var name = "";
     var argum = [];
-
+    var data2
 
     busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
 
@@ -115,10 +112,11 @@ router.post('/upload', function (req, res) {
         file.on('data', function (data) {
             buffer += data;
 
+
         });
         file.on('end', function () {
             base64data = buffer;
-        
+
         });
 
 
@@ -127,25 +125,20 @@ router.post('/upload', function (req, res) {
 
     busboy.on('field', function (fieldname, val, fieldnameTruncated, valTruncated) {
 
-            argum.push(val);
+        argum.push(val);
 
     });
     busboy.on('finish', function () {
 
+        res.json(base64data)
 
-        var jsonBin = {
-            base64data_: base64data, mime_: filetype, name_: name,
-            owner_: argum[0], description_: argum[1]
-        }
-        //
-        // // res.json(jsonBin)
-        //
+
         var file = new fileModel({
-            fileData: jsonBin.base64data_,
-                mimeType: jsonBin.mime_,
-                fileName: jsonBin.name_,
-                fileOwner: jsonBin.owner_,
-                desc: jsonBin.description_
+            fileData: base64data,
+            mimeType: filetype,
+            fileName: name,
+            fileOwner: argum[0],
+            desc: argum[1]
         })
         //
         file.save(function (err, file) {
@@ -156,7 +149,7 @@ router.post('/upload', function (req, res) {
             console.log("Save in database" + file.desc)
 
         })
-        
+
     });
 
     req.pipe(busboy);
@@ -165,40 +158,43 @@ router.post('/upload', function (req, res) {
 });
 
 
-
 router.get("/show/:i", function (req, res) {
 
-    var dataGet = {_id: req.params.i}
+    // var dataGet = {fileName: req.params.i}
+    var dataGet = {fileName: req.params.i}
 
     fileModel.findOne(dataGet).exec(function (err, doc) {
         if (err) {
             return next(err)
         }
 
-        var base64dataa = new Buffer(doc.fileData, 'binary').toString('base64');
 
-
-            var ress = {fileData : base64dataa,
+        var ress = {
+            fileData: doc.fileData,
             mime: doc.mimeType,
-            name: doc.fileName}
-     
-        res.json(ress)
-     
+            name: doc.fileName
+        }
 
+
+        res.json(ress)
+
+
+        // res.contentType('image/jpeg')
+        // buffer = new Buffer(doc.fileData, ['base64'])
+        // res.send(buffer) // musi być Buffer
     })
 });
 
 
-router.post('/display/', function(req, res) {
-    var data = {file : req.body.fileData,
-    mime: req.body.mime,
-        name: req.body.name}
+router.post('/display/', function (req, res) {
+    var data = {
+        file: req.body.fileData,
+        mime: req.body.mime,
+        name: req.body.name
+    }
 
     res.json(data)
 })
 
 
-
-    
-    
 module.exports = router;

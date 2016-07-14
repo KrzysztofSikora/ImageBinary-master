@@ -5,8 +5,8 @@
 var db = require('../db');
 
 var dataModel = db.model('dataModel', {
-    number: { type: String },
-    message:{ type: String }
+    number: {type: String},
+    message: {type: String}
 })
 
 

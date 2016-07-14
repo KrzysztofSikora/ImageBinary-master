@@ -5,7 +5,7 @@ var db = require('../db');
 
 var fileModel = db.model('fileModel', {
 
-    fileData: Buffer,
+    fileData: String,
     mimeType: String,
     fileName: String,
     fileOwner: String,
